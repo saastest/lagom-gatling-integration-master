@@ -1,0 +1,4 @@
+target/
+user-api/target/maven-status/
+user-impl/target/logs/
+user-impl/target/maven-status/
