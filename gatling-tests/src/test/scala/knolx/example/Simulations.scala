@@ -7,33 +7,28 @@ import com.typesafe.config._
 
 class Simulations extends Simulation {
 
- val httpProtocol = http
-    .baseUrl("https://petstore.octoperf.com")
-    .inferHtmlResources()
-    .acceptHeader("text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
-    .acceptEncodingHeader("gzip, deflate")
+ object get {
+    val validUser = repeat(10) {
+      exec(http("Get Valid User")
+        .get("/user").check(status.find.in(200)))
+    }
+    /*val inValidUser = repeat(10) {
+      exec(http("Get InValid User")
+        .get("/wronguser").check(status.find.in(400,401,404,501,502))
+        .headers(headers_1))
+        .pause(1)
+    }*/
+  }
+  val httpConf = http
+    .baseURL(ConfigFactory.load("gatling.properties").getString("BASE_URL_LOCAL"))
+    .acceptHeader("application/json; charset=utf-8")
+    .doNotTrackHeader("1")
     .acceptLanguageHeader("en-US,en;q=0.5")
-    .upgradeInsecureRequestsHeader("1")
-    .userAgentHeader("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0")
-    .silentUri(".*categoryId=FISH")
+    .acceptEncodingHeader("gzip, deflate")
+    .userAgentHeader("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:16.0) Gecko/20100101 Firefox/16.0")
 
+  val validUserScenario = scenario("GetUser").exec(get.validUser)
 
-
-
-  val scn = scenario("RecordedSimulation")
-    .exec(http("request_0")
-      .get("/actions/Catalog.action"))
-    .pause(1)
-    .exec(http("request_1")
-      .get("/actions/Catalog.action?viewCategory=&categoryId=FISH"))
-    .pause(1)
-    .exec(http("request_2")
-      .get("/actions/Catalog.action?viewProduct=&productId=FI-SW-01"))
-    .pause(2)
-    .exec(http("request_3")
-      .get("/actions/Catalog.action?viewCategory=&categoryId=DOGS"))
-
-  setUp(scn.inject(atOnceUsers(1))).protocols(httpProtocol)
+  setUp(validUserScenario.inject(rampUsers(25) over (10 seconds)).protocols(httpConf))
 
 }
-
