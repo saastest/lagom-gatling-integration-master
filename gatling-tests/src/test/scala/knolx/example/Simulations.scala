@@ -28,6 +28,6 @@ class Simulations extends Simulation {
 
   val validUserScenario = scenario("GetUser").exec(get.validUser)
 
-  setUp(validUserScenario.inject(atOnceUsers(10))).protocols(httpConf))
+  setUp(validUserScenario.inject(atOnceUsers(10))).protocols(httpConf)
 
 }
