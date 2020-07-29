@@ -8,11 +8,10 @@ import com.typesafe.config._
 class Simulations extends Simulation {
 
  object get {
-    val validUser = repeat(10) {
+    val validUser = 
       exec(http("Get Valid User")
         .get("/api/users?page=2").check(status.find.in(200)))
-    }
-    /*val inValidUser = repeat(10) {
+    }    /*val inValidUser = repeat(10) {
       exec(http("Get InValid User")
         .get("/wronguser").check(status.find.in(400,401,404,501,502))
         .headers(headers_1))
