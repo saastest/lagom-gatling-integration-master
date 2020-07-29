@@ -11,12 +11,7 @@ class Simulations extends Simulation {
     val validUser = 
       exec(http("Get Valid User")
         .get("/api/users?page=2").check(status.find.in(200)))
-        /*val inValidUser = repeat(10) {
-      exec(http("Get InValid User")
-        .get("/wronguser").check(status.find.in(400,401,404,501,502))
-        .headers(headers_1))
-        .pause(1)
-    }*/
+        
   }
   val httpConf = http
     .baseURL(ConfigFactory.load("gatling.properties").getString("BASE_URL_LOCAL"))
