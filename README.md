@@ -1,1 +1,1 @@
-# lagom-gatling-integration
+# Jenkins-gatling-integration
