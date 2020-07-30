@@ -8,10 +8,10 @@ import com.typesafe.config._
 class Simulations extends Simulation {
 
  object get {
-    val validUser = 
+    val validUser =  repeat(10) {
       exec(http("Get Valid User")
         .get("/api/users?page=2").check(status.find.in(200)))
-        
+    } 
   }
   val httpConf = http
     .baseURL(ConfigFactory.load("gatling.properties").getString("BASE_URL_LOCAL"))
